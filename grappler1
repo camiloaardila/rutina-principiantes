@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rutina Grappler &mdash; Camilo Ardila</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #111111; --card: #1a1a1a; --hdr: #2a2a2a;
+    --red: #c0392b; --white: #ffffff;
+    --gray: #cccccc; --gray2: #888888; --gray3: #444444;
+    --row-a: #1e1e1e; --row-b: #252525;
+  }
+  body { background: var(--bg); color: var(--white); font-family: Arial, sans-serif; font-size: 15px; line-height: 1.6; }
+  .page { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* COVER */
+  .cover { text-align: center; padding: 48px 0 40px; border-bottom: 2px solid var(--red); margin-bottom: 48px; }
+  .cover-label { font-size: 12px; font-weight: 700; color: var(--red); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 24px; }
+  .cover h1 { font-size: clamp(36px, 8vw, 72px); font-weight: 900; line-height: 1; color: var(--white); text-transform: uppercase; }
+  .cover h1 span { color: var(--red); display: block; }
+  .cover-sub { margin-top: 16px; font-size: 13px; color: var(--gray2); letter-spacing: 2px; }
+
+  /* NOTE CARD */
+  .note-card { background: var(--card); border-left: 4px solid var(--red); padding: 20px 24px; margin: 16px 0 32px; }
+  .note-card .label { font-size: 11px; font-weight: 700; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .note-card p { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 6px; }
+  .note-card p:last-child { margin-bottom: 0; }
+
+  /* SECTION NUM */
+  .section-num { display: flex; align-items: flex-end; gap: 20px; margin: 56px 0 24px; padding-bottom: 12px; border-bottom: 2px solid var(--red); }
+  .section-num .num { font-size: 56px; font-weight: 900; color: var(--red); line-height: 1; }
+  .section-num .sec-text h2 { font-size: 22px; font-weight: 700; color: var(--white); }
+  .section-num .sec-text p { font-size: 11px; color: var(--gray2); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+
+  /* BLOCK TITLE */
+  .block-title { background: var(--hdr); border-left: 4px solid var(--red); padding: 12px 20px; margin: 28px 0 0; display: flex; align-items: center; gap: 12px; }
+  .block-title .bnum { font-size: 20px; font-weight: 900; color: var(--red); }
+  .block-title .bname { font-size: 15px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* INLINE NOTE */
+  .inline-note { background: var(--hdr); border-left: 4px solid var(--red); padding: 10px 20px; }
+  .inline-note p { font-size: 13px; color: var(--gray2); font-style: italic; line-height: 1.6; }
+  .inline-note p:first-child { font-style: normal; color: var(--gray); font-weight: 600; }
+
+  /* TABLE */
+  .ex-table { width: 100%; border-collapse: collapse; margin: 0; }
+  .ex-table thead tr { background: var(--hdr); }
+  .ex-table thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; color: var(--gray2); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 2px solid var(--red); }
+  .ex-table tbody tr:nth-child(odd) { background: var(--row-a); }
+  .ex-table tbody tr:nth-child(even) { background: var(--row-b); }
+  .ex-table tbody tr:hover { background: #2e2e2e; }
+  .ex-table tbody td { padding: 12px 14px; font-size: 14px; color: var(--gray); border-bottom: 1px solid #333; vertical-align: top; }
+  .ex-table tbody td:first-child { color: var(--white); font-weight: 600; }
+  .ex-table tbody td.carga { color: var(--gray2); white-space: nowrap; font-size: 13px; }
+
+  /* VIDEO BUTTON */
+  .btn-video { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid var(--red); color: var(--red); font-size: 12px; font-weight: 700; padding: 6px 10px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: background 0.15s, color 0.15s; white-space: nowrap; }
+  .btn-video:hover { background: var(--red); color: var(--white); }
+  .btn-video.empty { border-color: var(--gray3); color: var(--gray3); cursor: default; }
+
+  /* COMBAT BOX */
+  .combat-header { background: var(--hdr); border-left: 4px solid var(--red); padding: 12px 20px; margin: 40px 0 0; display: flex; align-items: center; gap: 10px; }
+  .combat-header span { font-size: 15px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 1px; }
+  .combat-header .icon { color: var(--red); font-size: 18px; }
+
+  /* GLOSSARY GRID */
+  .glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 16px; }
+  .glossary-card { background: var(--card); border: 1px solid #2a2a2a; border-left: 3px solid var(--red); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .glossary-card .ex-name { font-size: 14px; font-weight: 700; color: var(--white); }
+  .glossary-card .ex-desc { font-size: 13px; color: var(--gray2); line-height: 1.5; }
+
+  /* CARDIO */
+  .cardio-block { background: var(--card); border-left: 4px solid var(--red); margin-top: 16px; }
+  .cardio-row { display: flex; gap: 0; border-bottom: 1px solid #2a2a2a; }
+  .cardio-row:last-child { border-bottom: none; }
+  .cardio-phase { padding: 14px 20px; min-width: 140px; font-size: 13px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 1px; border-right: 1px solid #2a2a2a; }
+  .cardio-detail { padding: 14px 20px; font-size: 14px; color: var(--gray); line-height: 1.6; }
+  .cardio-detail strong { color: var(--white); }
+
+  /* SEP */
+  .sep { border: none; border-top: 2px solid var(--red); margin: 56px 0; }
+
+  /* WEEK BLOCK */
+  .week-block { margin-bottom: 12px; }
+  .week-title { background: var(--hdr); border-left: 4px solid var(--red); padding: 12px 20px; display: flex; align-items: center; gap: 14px; }
+  .week-title .wnum { font-size: 26px; font-weight: 900; color: var(--red); line-height: 1; }
+  .week-title .wtext { font-size: 15px; font-weight: 700; color: var(--white); }
+  .week-lines { background: var(--card); border-left: 4px solid var(--red); padding: 0; }
+  .week-lines li { list-style: none; padding: 10px 20px; border-bottom: 1px solid #2a2a2a; font-size: 14px; color: var(--gray); line-height: 1.6; }
+  .week-lines li:last-child { border-bottom: none; }
+  .week-lines li::before { content: "\2014  "; color: var(--red); font-weight: 700; }
+
+  /* FOOTER */
+  .footer { background: var(--card); border-top: 2px solid var(--red); text-align: center; padding: 32px 24px; margin-top: 64px; }
+  .footer p { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+  .footer a { color: var(--red); text-decoration: none; font-weight: 700; }
+  .footer a:hover { text-decoration: underline; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: var(--card); border: 1px solid var(--red); width: 90%; max-width: 800px; position: relative; }
+  .modal-top { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 2px solid var(--red); background: var(--hdr); }
+  .modal-top .modal-title { font-size: 14px; font-weight: 700; color: var(--white); }
+  .modal-close { background: none; border: none; color: var(--gray2); font-size: 24px; cursor: pointer; line-height: 1; transition: color 0.15s; }
+  .modal-close:hover { color: var(--red); }
+  .modal-video { position: relative; padding-bottom: 56.25%; height: 0; }
+  .modal-video iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .modal-placeholder { padding: 60px 40px; text-align: center; }
+  .modal-placeholder p { color: var(--gray2); font-size: 14px; line-height: 1.7; }
+
+  @media (max-width: 600px) {
+    .ex-table thead th:nth-child(3), .ex-table tbody td:nth-child(3) { display: none; }
+    .section-num .num { font-size: 40px; }
+    .cover h1 { font-size: 40px; }
+    .glossary-grid { grid-template-columns: 1fr; }
+    .cardio-row { flex-direction: column; }
+    .cardio-phase { border-right: none; border-bottom: 1px solid #2a2a2a; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">Camilo Ardila &middot; Sistema de Entrenamiento</div>
+    <h1>Programa del<span>Grappler</span></h1>
+    <div class="cover-sub">&#9632; &#9632; &#9632; &#9632; &#9632; &nbsp; Grappling &middot; BJJ &middot; MMA &middot; Deportes de Contacto &nbsp; &middot; &nbsp; Semana 1</div>
+  </div>
+
+  <!-- NOTA METODOL&Oacute;GICA -->
+  <div class="note-card">
+    <div class="label">Instrucciones del Coach</div>
+    <p>Este programa est&aacute; dise&ntilde;ado para atletas con una base s&oacute;lida de movimiento. La estructura sigue el modelo Joint-by-Joint: movilidad primero, potencia despu&eacute;s, fuerza al final. No lo inviertas. Cada sesi&oacute;n empieza con tu selecci&oacute;n de movilidad del glosario &mdash; elige 5 ejercicios y h&aacute;zlos siempre antes de cualquier otra cosa.</p>
+    <p>El descanso entre series es el que necesitas para estar completamente recuperado. <strong style="color:var(--white)">CALIDAD DE MOVIMIENTO, NO FATIGA.</strong></p>
+  </div>
+
+  <!-- 01 GLOSARIO MOVILIDAD -->
+  <div class="section-num">
+    <div class="num">01</div>
+    <div class="sec-text">
+      <h2>Glosario de Movilidad</h2>
+      <p>Elige 5 ejercicios para cada sesi&oacute;n</p>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <div class="label">C&oacute;mo usarlo</div>
+    <p>Antes de cada sesi&oacute;n, elige 5 ejercicios de este glosario. No tienes que hacer siempre los mismos &mdash; rota seg&uacute;n lo que notes tenso ese d&iacute;a. Dedica 8&ndash;10 minutos en total. La movilidad no es opcional: es lo que te permite entrenar pesado sin romperte.</p>
+  </div>
+
+  <div class="glossary-grid">
+
+    <div class="glossary-card">
+      <div class="ex-name">Respiraci&oacute;n diafragm&aacute;tica 90/90</div>
+      <div class="ex-desc">Activa el sistema nervioso parasimp&aacute;tico. Base de todo. 1 &times; 5 respiraciones.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="2txJD0FoEes" data-name="Respiraci&oacute;n 90/90">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Hip 90/90 con rotaci&oacute;n activa</div>
+      <div class="ex-desc">Cadera interna + externa. Cr&iacute;tico para guard y sprawl. 2 &times; 5 / lado.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="94B76wtYsEI" data-name="Hip 90/90">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Yoga Push-Up (perro boca abajo &rarr; cobra)</div>
+      <div class="ex-desc">Extensi&oacute;n tor&aacute;cica + apertura de hombros. 2 &times; 6.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="Yr4nCYzapY0" data-name="Yoga Push-Up">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Open Book en suelo</div>
+      <div class="ex-desc">Rotaci&oacute;n tor&aacute;cica. El grappler vive en rotaci&oacute;n. 2 &times; 8 / lado.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="HqYNXRx5dJ8" data-name="Open Book">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Ankle Mobility con manos en pared</div>
+      <div class="ex-desc">Sin tobillo m&oacute;vil no hay sentadilla profunda. 2 &times; 8 / lado.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="eGjJkurZlGw" data-name="Ankle Mobility">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Leg Swing frontal + lateral</div>
+      <div class="ex-desc">Activaci&oacute;n din&aacute;mica de cadera. Amplitud creciente. 1 &times; 10 / lado.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="64FhHrDsTeg" data-name="Leg Swing">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">World's Greatest Stretch</div>
+      <div class="ex-desc">Estocada + rotaci&oacute;n tor&aacute;cica + apertura. Todo el cuerpo en un movimiento. 2 &times; 5 / lado.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="-CiWQ2IvY34" data-name="World's Greatest Stretch">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Hip Flexor Stretch con activaci&oacute;n gl&uacute;tea</div>
+      <div class="ex-desc">Extiende cadera, aprieta gl&uacute;teo. Activa lo que el flexor inhibe. 2 &times; 8 / lado.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="ZQXGUfGmgKc" data-name="Hip Flexor Stretch">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Band Pull-Apart</div>
+      <div class="ex-desc">Activa retractores escapulares antes de cualquier press. 2 &times; 15.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="SuvO4TBwSu4" data-name="Band Pull-Apart">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Cat-Cow + rotaci&oacute;n en cuadrupedia</div>
+      <div class="ex-desc">Segmentaci&oacute;n vertebral. V&eacute;rtebra a v&eacute;rtebra. 2 &times; 8.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="yHTbstQDkKc" data-name="Cat-Cow">&#9654; VER</button>
+    </div>
+
+    <div class="glossary-card">
+      <div class="ex-name">Squat to Stand</div>
+      <div class="ex-desc">Movilidad de cadera + tobillo + extensi&oacute;n tor&aacute;cica en un patr&oacute;n. 2 &times; 8.</div>
+      <button class="btn-video" onclick="openVideo(this)" data-id="jGQPfQQU8YQ" data-name="Squat to Stand">&#9654; VER</button>
+    </div>
+
+  </div>
+
+  <hr class="sep">
+
+  <!-- 02 D&Iacute;A 1 -->
+  <div class="section-num">
+    <div class="num">02</div>
+    <div class="sec-text">
+      <h2>D&iacute;a 1 &middot; Empuje Horizontal + Dominadas</h2>
+      <p>Elige 5 ejercicios del glosario antes de empezar</p>
+    </div>
+  </div>
+
+  <div class="block-title"><span class="bnum">01</span><span class="bname">Pliometr&iacute;a</span></div>
+  <div class="inline-note">
+    <p>Intencionalidad m&aacute;xima en cada salto. Si no puedes mantener la calidad, descansa m&aacute;s. La pliometr&iacute;a sin intenci&oacute;n es cardio disfrazado.</p>
+  </div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>POGO Jumps con goma el&aacute;stica &mdash; m&aacute;xima altura</td><td class="carga">4 &times; 10</td><td>Agarra una goma fijada arriba (polea, barra o similar) con ambas manos. La tensi&oacute;n te asiste en la fase de vuelo para alcanzar mayor altura. Contacto m&iacute;nimo con el suelo, rebote inmediato.</td><td><button class="btn-video empty" data-name="POGO Jumps banda">&#9654; VER</button></td></tr>
+      <tr><td>Broad Jump</td><td class="carga">3 &times; 5</td><td>M&aacute;xima distancia. Aterriza con control total. Si la distancia baja, has terminado la serie.</td><td><button class="btn-video empty" data-name="Broad Jump">&#9654; VER</button></td></tr>
+      <tr><td>Salto unilateral &mdash; rodilla arriba desde sentadilla b&uacute;lgara</td><td class="carga">3 &times; 6 / pierna</td><td>Posici&oacute;n de sentadilla b&uacute;lgara, explota con una pierna llevando la rodilla al pecho. Patr&oacute;n de derribo.</td><td><button class="btn-video empty" data-name="Salto unilateral b&uacute;lgara">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">02</span><span class="bname">Potencia</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Trap Bar &mdash; encogimiento de hombro &mdash; m&aacute;xima potencia</td><td class="carga">3 &times; 5</td><td>Triple extensi&oacute;n completa. El encogimiento de hombro al final transfiere al clinch. Velocidad m&aacute;xima.</td><td><button class="btn-video empty" data-name="Trap Bar potencia">&#9654; VER</button></td></tr>
+      <tr><td>Med Ball lateral</td><td class="carga">3 &times; 6</td><td>Potencia rotacional pura. Empieza desde las piernas. Cuando lances, haz un agujero en la pared.</td><td><button class="btn-video empty" data-name="Med Ball lateral">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">03</span><span class="bname">Fuerza Principal</span></div>
+  <div class="inline-note">
+    <p>Tempo en Press Banca: 4 segundos bajada &mdash; 1 segundo pausa abajo &mdash; subida explosiva. No neg&oacute;cies el tempo.</p>
+  </div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Press Banca Tempo (4&ndash;1&ndash;0)</td><td class="carga">3 &times; 6</td><td>4 seg bajada, 1 seg pausa en el pecho, subida explosiva. El tempo elimina el rebote y dobla el tiempo bajo tensi&oacute;n.</td><td><button class="btn-video empty" data-name="Press Banca Tempo">&#9654; VER</button></td></tr>
+      <tr><td>Dominadas pronas</td><td class="carga">3 &times; 8</td><td>Agarre prono, depresi&oacute;n escapular primero. Cuerpo r&iacute;gido. Si no llegas a 8 limpio, reduce el lastre.</td><td><button class="btn-video empty" data-name="Dominadas pronas">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">04</span><span class="bname">Core</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Landmine Rotation</td><td class="carga">2 &times; 8</td><td>Rotaci&oacute;n de cadera, no de hombros. El core resiste y transfiere. Directo al clinch y los throws.</td><td><button class="btn-video empty" data-name="Landmine Rotation">&#9654; VER</button></td></tr>
+      <tr><td>Toes to Bar</td><td class="carga">2 &times; MAX</td><td>Control total de la cadena posterior. Sin balanceo. Si no llegas a la barra, lleva las rodillas al pecho.</td><td><button class="btn-video empty" data-name="Toes to Bar">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="combat-header"><span class="icon">&#9876;</span><span>Cuello</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Flex&oacute;-extensi&oacute;n con goma el&aacute;stica &mdash; 4 direcciones</td><td class="carga">3 &times; 30 o fallo</td><td>Frente, detr&aacute;s, izquierda, derecha. Si fallas antes de 30, eso es tu marca &mdash; sup&eacute;rala semana a semana.</td><td><button class="btn-video empty" data-name="Cuello goma el&aacute;stica">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">05</span><span class="bname">Accesorios</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Copenhagen Plank</td><td class="carga">2 &times; 10</td><td>Aductores bajo tensi&oacute;n din&aacute;mica. La cadera que no trabajas en guard cerrado es la que se lesiona.</td><td><button class="btn-video" onclick="openVideo(this)" data-id="kXTHTV6--Bo" data-name="Copenhagen Plank">&#9654; VER</button></td></tr>
+      <tr><td>Sentadilla b&uacute;lgara contralateral &mdash; m&aacute;ximo ROM</td><td class="carga">2 &times; 8 / lado</td><td>Mancuerna contralateral a la pierna de trabajo. M&aacute;xima profundidad. Rodilla trasera casi toca el suelo.</td><td><button class="btn-video empty" data-name="Sentadilla b&uacute;lgara contralateral">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <hr class="sep">
+
+  <!-- 03 D&Iacute;A 2 -->
+  <div class="section-num">
+    <div class="num">03</div>
+    <div class="sec-text">
+      <h2>D&iacute;a 2 &middot; Tir&oacute;n + Empuje Vertical</h2>
+      <p>Elige 5 ejercicios del glosario antes de empezar</p>
+    </div>
+  </div>
+
+  <div class="block-title"><span class="bnum">01</span><span class="bname">Pliometr&iacute;a</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Salto lateral unilateral</td><td class="carga">3 &times; 10</td><td>Velocidad lateral m&aacute;xima. Rebote inmediato. Patr&oacute;n de reestructura y sprawl.</td><td><button class="btn-video empty" data-name="Salto lateral unilateral">&#9654; VER</button></td></tr>
+      <tr><td>Salto al caj&oacute;n</td><td class="carga">3 &times; 5</td><td>M&aacute;xima explosi&oacute;n. Aterriza con el pie completo. Si el caj&oacute;n es c&oacute;modo, s&uacute;belo.</td><td><button class="btn-video empty" data-name="Salto al caj&oacute;n">&#9654; VER</button></td></tr>
+      <tr><td>Salto rodilla arriba desde posici&oacute;n de zancada</td><td class="carga">3 &times; 5 / pierna</td><td>Desde zancada, explota llevando la rodilla al pecho. Aterriza controlado. Directo al cambio de nivel.</td><td><button class="btn-video empty" data-name="Salto zancada rodilla">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">02</span><span class="bname">Potencia</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Clean Pull</td><td class="carga">3 &times; 6</td><td>Triple extensi&oacute;n completa. Barra pegada al cuerpo. La velocidad de barra importa m&aacute;s que el peso.</td><td><button class="btn-video empty" data-name="Clean Pull">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">03</span><span class="bname">Fuerza Principal</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Seal Row</td><td class="carga">3 &times; 10</td><td>Apoyo en pecho sobre banco elevado. Aisla el patr&oacute;n de tir&oacute;n sin compensaci&oacute;n lumbar. Esc&aacute;pula primero.</td><td><button class="btn-video empty" data-name="Seal Row">&#9654; VER</button></td></tr>
+      <tr><td>Press Militar con barra sentado en suelo</td><td class="carga">3 &times; 10</td><td>Sentado en el suelo elimina la compensaci&oacute;n lumbar. Fuerza de hombro pura. Codos adelante.</td><td><button class="btn-video empty" data-name="Press Militar suelo">&#9654; VER</button></td></tr>
+      <tr><td>Floor Press</td><td class="carga">3 &times; 8</td><td>Rango de movimiento limitado por el suelo: protege el hombro. Pausa de 1 seg en el suelo antes de subir.</td><td><button class="btn-video empty" data-name="Floor Press">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">04</span><span class="bname">Accesorios</span></div>
+  <div class="inline-note">
+    <p>Flexiones diamante MAX 4 minutos: haz todas las que puedas en 4 minutos descansando cuando necesites. Anota cu&aacute;ntas haces &mdash; supera esa marca semana a semana.</p>
+  </div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Cambio de agarre colgado de barra</td><td class="carga">3 &times; 10</td><td>Cambiar ambas manos es una repetici&oacute;n. Grip espec&iacute;fico de grappling. Antebrazo y agarre bajo fatiga.</td><td><button class="btn-video empty" data-name="Cambio agarre barra">&#9654; VER</button></td></tr>
+      <tr><td>Curl Martillo</td><td class="carga">3 &times; 8</td><td>Agarre neutro. B&iacute;ceps + braquial. M&aacute;s transferencia al agarre que el curl cl&aacute;sico.</td><td><button class="btn-video empty" data-name="Curl Martillo">&#9654; VER</button></td></tr>
+      <tr><td>Flexiones Diamante &mdash; MAX 4 minutos</td><td class="carga">4 min</td><td>Anota tu marca. Supera la semana siguiente. Descansa cuando necesites dentro de los 4 minutos.</td><td><button class="btn-video empty" data-name="Flexiones Diamante">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="combat-header"><span class="icon">&#9876;</span><span>Cuello</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Flexi&oacute;n y extensi&oacute;n tumbado en banco con disco</td><td class="carga">3 &times; 30</td><td>Disco en la frente para flexi&oacute;n, en la nuca para extensi&oacute;n. Movimiento lento y controlado. Sin impulso.</td><td><button class="btn-video empty" data-name="Cuello disco banco">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <hr class="sep">
+
+  <!-- 04 D&Iacute;A 3 -->
+  <div class="section-num">
+    <div class="num">04</div>
+    <div class="sec-text">
+      <h2>D&iacute;a 3 &middot; Cadena Posterior + Fondos</h2>
+      <p>Elige 5 ejercicios del glosario antes de empezar</p>
+    </div>
+  </div>
+
+  <div class="block-title"><span class="bnum">01</span><span class="bname">Pliometr&iacute;a</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Kneel to Stand</td><td class="carga">2 &times; 5</td><td>Desde rodillas en el suelo, levantate explosivamente a posici&oacute;n de pie. Patr&oacute;n de levantada en grappling.</td><td><button class="btn-video empty" data-name="Kneel to Stand">&#9654; VER</button></td></tr>
+      <tr><td>Kneel to Stand + salto vertical &mdash; movimiento fluido</td><td class="carga">3 &times; 5</td><td>Igual que el anterior pero encadenas directamente con un salto vertical. Sin pausa. Fluidez de movimiento.</td><td><button class="btn-video empty" data-name="Kneel to Stand + salto">&#9654; VER</button></td></tr>
+      <tr><td>Med Ball frontal</td><td class="carga">3 &times; 6</td><td>Lanzamiento frontal desde el pecho. Potencia de empuje explosivo. Haz un agujero en la pared.</td><td><button class="btn-video empty" data-name="Med Ball frontal">&#9654; VER</button></td></tr>
+      <tr><td>Med Ball slam en suelo</td><td class="carga">3 &times; 6</td><td>Extensi&oacute;n total + flexi&oacute;n explosiva. Lanza hacia el suelo con toda la intenci&oacute;n. Misma energ&iacute;a que un throw.</td><td><button class="btn-video empty" data-name="Med Ball slam suelo">&#9654; VER</button></td></tr>
+      <tr><td>Flexiones con salto</td><td class="carga">3 &times; 6</td><td>Flexi&oacute;n explosiva hasta que las manos despeguen del suelo. Contacto m&iacute;nimo. Tren superior reactivo.</td><td><button class="btn-video empty" data-name="Flexiones con salto">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">02</span><span class="bname">Fuerza Principal</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Deadlift Rumano con barra</td><td class="carga">3 &times; 8</td><td>Bisagra de cadera pura. Isquios y gl&uacute;teos. Barra pegada a las piernas en todo momento. No es una sentadilla.</td><td><button class="btn-video empty" data-name="DL Rumano barra">&#9654; VER</button></td></tr>
+      <tr><td>Hip Thrust Unilateral con KB</td><td class="carga">2 &times; 12 / lado</td><td>GL&Uacute;TEO UNILATERAL. La cadera sube, no la espalda. KB en la cadera. Pausa 1 seg arriba.</td><td><button class="btn-video empty" data-name="Hip Thrust unilateral KB">&#9654; VER</button></td></tr>
+      <tr><td>Fondos</td><td class="carga">3 &times; 8&ndash;10</td><td>Cuerpo vertical para pecho, inclinado para tr&iacute;ceps. Descenso controlado. Si son f&aacute;ciles, a&ntilde;ade lastre.</td><td><button class="btn-video empty" data-name="Fondos">&#9654; VER</button></td></tr>
+      <tr><td>Dominadas agarre kimono</td><td class="carga">3 &times; MAX</td><td>Agarre con tela o toalla. El grip espec&iacute;fico del grappling. Anota tu marca y sup&eacute;rala.</td><td><button class="btn-video empty" data-name="Dominadas kimono">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">03</span><span class="bname">Accesorios</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Extensi&oacute;n de tr&iacute;ceps en polea</td><td class="carga">3 &times; 10</td><td>Codo fijo. Extensi&oacute;n completa. El tr&iacute;ceps es el 70% del brazo &mdash; no lo ignores.</td><td><button class="btn-video empty" data-name="Extensi&oacute;n tr&iacute;ceps polea">&#9654; VER</button></td></tr>
+      <tr><td>Curl N&oacute;rdico &mdash; 5 seg exc&eacute;ntrico</td><td class="carga">3 &times; MAX</td><td>Baja en 5 segundos. Sube con las manos si necesitas. El m&aacute;s evidenciado para prevenci&oacute;n de rotura de isquios.</td><td><button class="btn-video empty" data-name="Curl N&oacute;rdico">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <div class="block-title"><span class="bnum">04</span><span class="bname">Core</span></div>
+  <table class="ex-table">
+    <thead><tr><th>Ejercicio</th><th>Carga</th><th>Notas T&eacute;cnicas</th><th>V&iacute;deo</th></tr></thead>
+    <tbody>
+      <tr><td>Dragon Flag</td><td class="carga">3 &times; MAX</td><td>Control total de la cadena posterior. La columna baja como una tabla r&iacute;gida. El ejercicio de core m&aacute;s exigente del programa.</td><td><button class="btn-video empty" data-name="Dragon Flag">&#9654; VER</button></td></tr>
+    </tbody>
+  </table>
+
+  <hr class="sep">
+
+  <!-- CARDIO -->
+  <div class="section-num">
+    <div class="num">05</div>
+    <div class="sec-text">
+      <h2>Trabajo Cardiovascular</h2>
+      <p>2 veces por semana &middot; Siempre separado de la fuerza y despu&eacute;s de esta</p>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <div class="label">Importante</div>
+    <p>El cardio nunca se hace el mismo d&iacute;a que la fuerza. Si entrenas fuerza el lunes, el cardio va el martes o el mi&eacute;rcoles. Despu&eacute;s de la fuerza, nunca antes.</p>
+  </div>
+
+  <div class="cardio-block">
+    <div class="cardio-row">
+      <div class="cardio-phase">Semana A &mdash; D&iacute;a 1</div>
+      <div class="cardio-detail">
+        <strong>Bici Zona 2 &middot; 40 minutos</strong><br>
+        Ritmo c&oacute;modo y constante. Puedes mantener una conversaci&oacute;n. Frecuencia card&iacute;aca entre el 60&ndash;70% del m&aacute;ximo. No es f&aacute;cil &mdash; es controlado.
+      </div>
+    </div>
+    <div class="cardio-row">
+      <div class="cardio-phase">Semana A &mdash; D&iacute;a 2</div>
+      <div class="cardio-detail">
+        <strong>Intervalos &middot; 8 rounds &middot; 20 seg al 100% / 40 seg al 50%</strong><br>
+        Ski Erg, Air Bike o Remo. Al 100% cuando trabajes, sin trampa. Los 40 segundos de recuperaci&oacute;n son activos &mdash; no pares del todo.
+      </div>
+    </div>
+    <div class="cardio-row">
+      <div class="cardio-phase">Semana B &mdash; D&iacute;a 1</div>
+      <div class="cardio-detail">
+        <strong>Bici Zona 2 &middot; 40 minutos</strong><br>
+        Igual que la Semana A. La zona 2 construye el motor aer&oacute;bico base &mdash; es lo que te permite recuperarte entre rounds.
+      </div>
+    </div>
+    <div class="cardio-row">
+      <div class="cardio-phase">Semana B &mdash; D&iacute;a 2</div>
+      <div class="cardio-detail">
+        <strong>Intervalos &middot; 8 rounds &middot; 30 seg al 100% / 60 seg al descanso</strong><br>
+        M&aacute;s tiempo de trabajo, m&aacute;s tiempo de recuperaci&oacute;n. Intensidad m&aacute;xima en los 30 segundos. La mayor recuperaci&oacute;n te permite mantener la calidad en cada round.
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- 06 PROGRESI&Oacute;N -->
+  <div class="section-num">
+    <div class="num">06</div>
+    <div class="sec-text">
+      <h2>Progresi&oacute;n &mdash; 4 Semanas</h2>
+      <p>C&oacute;mo avanzar sin romperte</p>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <div class="label">Michael Boyle</div>
+    <p>Primero destreza en el movimiento, despu&eacute;s intensidad. No a&ntilde;adas carga hasta que el patr&oacute;n sea limpio. Cada semana te pido que hagas un poco m&aacute;s &mdash; pero siempre con t&eacute;cnica. Si el movimiento se rompe, la carga baja.</p>
+  </div>
+
+  <div class="week-block" style="margin-top:24px">
+    <div class="week-title"><span class="wnum">S1</span><span class="wtext">Semana 1 &middot; Establece las marcas base</span></div>
+    <ul class="week-lines">
+      <li>Ejecuta el programa exactamente como est&aacute;. No a&ntilde;adas carga todav&iacute;a.</li>
+      <li>Anota tus marcas en los ejercicios MAX (Toes to Bar, Dominadas kimono, Flexiones diamante, Dragon Flag, Curl N&oacute;rdico). Son tu punto de partida.</li>
+      <li>En cardio: empieza siempre en Semana A.</li>
+    </ul>
+  </div>
+  <div class="week-block">
+    <div class="week-title"><span class="wnum">S2</span><span class="wtext">Semana 2 &middot; A&ntilde;ade una serie en pliometr&iacute;a</span></div>
+    <ul class="week-lines">
+      <li>Pliometr&iacute;a: a&ntilde;ade una serie en todos los ejercicios.</li>
+      <li>Fuerza: mant&eacute;n las mismas series y reps. Sube el peso si las &uacute;ltimas 2 reps te resultaron f&aacute;ciles.</li>
+      <li>Supera tus marcas MAX de la semana 1 aunque sea por 1 rep.</li>
+    </ul>
+  </div>
+  <div class="week-block">
+    <div class="week-title"><span class="wnum">S3</span><span class="wtext">Semana 3 &middot; Sube la carga en fuerza</span></div>
+    <ul class="week-lines">
+      <li>Fuerza principal: a&ntilde;ade carga en todos los ejercicios donde el movimiento sea limpio.</li>
+      <li>Press Banca Tempo: no neg&oacute;cies el tempo para meter m&aacute;s peso. El peso sube cuando el tempo es perfecto.</li>
+      <li>Cardio: eval&uacute;a si puedes pasar a la siguiente fase.</li>
+    </ul>
+  </div>
+  <div class="week-block">
+    <div class="week-title"><span class="wnum">S4</span><span class="wtext">Semana 4 &middot; Sube las repeticiones</span></div>
+    <ul class="week-lines">
+      <li>Fuerza: mant&eacute;n la carga de la semana 3, sube 2 reps en cada ejercicio.</li>
+      <li>Pliometr&iacute;a: a&ntilde;ade 1&ndash;2 reps por serie manteniendo la calidad de aterrizaje.</li>
+      <li>Al final de esta semana decides si repetir el ciclo con m&aacute;s carga o avanzar al siguiente bloque.</li>
+    </ul>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Tus n&uacute;meros no te definen &mdash; te dan el punto de partida correcto.</p>
+    <p style="font-weight:400;color:var(--gray2);font-size:13px;margin-top:4px">
+      &iquest;Dudas? Pregunta en el muro de la comunidad o por Instagram
+      <a href="https://instagram.com/camiloardila" target="_blank">@camiloardila</a>
+    </p>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="videoModal">
+  <div class="modal-box">
+    <div class="modal-top">
+      <span class="modal-title" id="modalTitle">Tutorial</span>
+      <button class="modal-close" onclick="closeVideo()">&#10005;</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+  function openVideo(btn) {
+    var id   = btn.getAttribute('data-id');
+    var name = btn.getAttribute('data-name');
+    if (!id) return;
+    document.getElementById('modalTitle').textContent = name;
+    document.getElementById('modalContent').innerHTML =
+      '<div class="modal-video"><iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>';
+    document.getElementById('videoModal').classList.add('active');
+  }
+  function closeVideo() {
+    document.getElementById('videoModal').classList.remove('active');
+    document.getElementById('modalContent').innerHTML = '';
+  }
+  document.getElementById('videoModal').addEventListener('click', function(e) {
+    if (e.target === this) closeVideo();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeVideo();
+  });
+</script>
+</body>
+</html>
